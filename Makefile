@@ -56,10 +56,14 @@ INCLUDES += -Ilib/samd21/samd21a/include/
 endif
 
 ifeq ($(CHIP_FAMILY), samd51)
+ifeq ($(findstring SAME51,$(CHIP_VARIANT)),SAME51)
+INCLUDES += -Ilib/same51/include/
+else
 ifeq ($(findstring SAME54,$(CHIP_VARIANT)),SAME54)
 INCLUDES += -Ilib/same54/include/
 else
 INCLUDES += -Ilib/samd51/include/
+endif
 endif
 endif
 
@@ -138,7 +142,7 @@ qc \n\
 " > $(BUILD_PATH)/flash.jlink
 
 jlink-flash: $(BUILD_PATH)/$(NAME).bin $(BUILD_PATH)/flash.jlink
-	jlinkexe -if swd -device AT$(CHIP_VARIANT) -speed 4000 -CommanderScript $(BUILD_PATH)/flash.jlink
+	JLinkExe -if swd -device AT$(CHIP_VARIANT) -speed 4000 -CommanderScript $(BUILD_PATH)/flash.jlink
 
 wait:
 	sleep 5
